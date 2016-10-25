@@ -1,4 +1,4 @@
-Visualization_Project2
+#Visualization_Project2
 In this project, we will work on the texts extracted from news/blogs and classified into 4 categories: people names, locations, organizations, and miscellaneous. Each entry also contains the published time/date of the article/blog.
 
 #Top 50 words Extraction
