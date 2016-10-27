@@ -35,7 +35,7 @@ var words = [],
     freq  =[], 
     width = 500, 
     height = 500;
-d3.csv("top50.csv", function(data) {
+d3.csv("top_50_terms.csv", function(data) {
     // build the list of city names
     data.forEach( function (d) {
 	/*dataAll[d.State]=[];
@@ -44,7 +44,7 @@ d3.csv("top50.csv", function(data) {
         words.push({text: d.word,frequencies:d.freq, size:d.freq});
 		//words[d.freq].push(d);
     });
-	
+	words = words.slice(0,50);
 	  var wordscale = d3.scale.linear()
         .range([0,30])
         .domain([d3.min(words,function(d) { return (d.size)/2; }),
