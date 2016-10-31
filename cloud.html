@@ -25,17 +25,23 @@
 
 
 <script>
-var fill = d3.scale.category20();
 
+//var fill = d3.scale.category20();
+var fill = d3.scale.ordinal()
+		      .domain([2748,648])
+			  .range(["#bdba61", "#c89d26", "#91df7e", "#108c49", "#7b7d40", "#fdd801", "#048699", "#fc9d40", "#ff0f3b", "#87a72c", "#a25cc2", "#b95a82", "#bb8a80", "#cce733", "#f7b58d", "#adaaab", "#c141c8", "#08fbd8", "#ff6de4", "#c26040", "#bb9bf6", "#b08f44", "#6d96de", "#8dcaff", "#5be51c", "#68c948", "#ff5fb8", "#7f9872", "#9aa5ca", "#bad292", "#c32fe4", "#fc92df", "#e08eaa", "#fd0afd", "#2daad4", "#d96d2a", "#69e0c9", "#ce4b69", "#79ca8d", "#6e8e9a", "#ffec83", 
+			  "#de0fb5", "#8471a2", "#bbd766", "#e94805", "#06ff54", "#9cf046", "#6a63ff", "#05e774", 
+			  "#e38c7b"]);
+    
 var margin = {top: 40, right: 60, bottom: 100, left: 30},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-
+//
 var words = [],
-    freq  =[], 
+     
     width = 500, 
     height = 500;
-d3.csv("top_50_terms.csv", function(data) {
+d3.csv("top50.csv", function(data) {
     // build the list of city names
     data.forEach( function (d) {
 	/*dataAll[d.State]=[];
@@ -44,13 +50,14 @@ d3.csv("top_50_terms.csv", function(data) {
         words.push({text: d.word,frequencies:d.freq, size:d.freq});
 		//words[d.freq].push(d);
     });
-	words = words.slice(0,50);
+	//words = words.slice(0,11);
+	//this comment above can limit the number of entries in the tag cloud
 	  var wordscale = d3.scale.linear()
         .range([0,30])
         .domain([d3.min(words,function(d) { return (d.size)/2; }),
                  d3.max(words,function(d) { return (d.size)/2; })
-               ]);
-            
+               ]);/*created an object */
+       
 	      d3.layout.cloud().size([450, 300])
         .words(words)
         .padding(0)
