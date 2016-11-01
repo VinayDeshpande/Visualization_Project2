@@ -8,7 +8,7 @@ categories based on frequencies.
  
 The R script is top50_words_extract.R for both datasets, the processed data is in wikinews_text for wiki news data and huffingtonnews_text.zip for huffington news data. The dataset is in dataset folder under whom wiki and huffington folders are for wiki news and huffington news data respectively. top50_words_huff.csv and top50_words_wiki.csv files contain the top 50 words extracted from the dataset.
 
-#Top 50 words monthly frequency
-We have generated the monthly frequency of each of the top 50 words for both wiki and huffington data. monthly_freq_wiki.csv and monthly_freq_huff.csv are the files for wiki and huffington datasets respectively
+#Top 50 words monthly and daily frequency
+We have generated the monthly frequency of each of the top 50 words for both wiki and huffington data. monthly_freq_wiki.csv and monthly_freq_huff.csv are the files for monthly while daily_freq_wiki.csv and daily_fre_huff.csv for daily frequency respectively
 
  
