@@ -2,75 +2,25 @@
 <meta charset="utf-8">
 <h2>Word Frequency </h2>
 <style>
- 
-body { font: 12px Arial;}
-canvas-svg {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  width: 400px;
-  height: 250px;
-  position: relative;
-}
-
-
-
-#tooltip-container {
-  position: absolute;
-  background-color: #fff;
-  color: #000;
-  padding: 10px;
-  border: 1px solid;
-  display: none;
-}
-.axis path,
-.axis line {
-			fill: none;
-			stroke: grey;
-			stroke-width: 1;
-			shape-rendering: crispEdges;
-			}
-.y.axis path {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-.brush .extent {
-  stroke: #fff;
-  fill-opacity: .125;
-  shape-rendering: crispEdges;
-}
-.line {
-  fill: none;
-}
-.tooltip_key {
-  font-weight: bold;
-  color : Black;
-}
-.tooltip_value {
-  margin-left: 20px;
-  float: right;
-}
-div.tooltip {	
-			position: absolute;			
-			text-align: center;			
-			width: 60px;					
-			height: 28px;					
-			padding: 2px;				
-			font: 12px sans-serif;		
-			background: lightsteelblue;	
-			border: 0px;		
-			border-radius: 8px;			
-			pointer-events: none;			
-		}
-</style>
+      body {
+        font: 9px sans-serif;
+        color: #121401;
+      }
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #121401;
+        stroke-width: 2px;
+        shape-rendering: crispEdges;
+      }
+    </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<div id="chart" style = "float:left; width: 70%;"></div>
-<div id="canvas-svg"></div>
+
 <div id="list">
-<div id="tooltip-container"></div>
 <div>
 			
 			<br><label id="lb"></label>
@@ -79,19 +29,17 @@ div.tooltip {
 <script>
 
 
-var margin = {top: 10, right: 10, bottom: 100, left: 40},
-    margin2 = {top: 430, right: 10, bottom: 20, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom,
-    height2 = 500 - margin2.top - margin2.bottom;
-var color = d3.scale.category10();
- 
-var parseDate = d3.time.format("%B-%Y").parse;
+ var margin = {top: 20, right: 55, bottom: 30, left: 40},
+          width  = 1000 - margin.left - margin.right,
+          height = 500  - margin.top  - margin.bottom;
+
+
+
  
 var x = d3.time.scale().range([0, width]),
     x2 = d3.time.scale().range([0, width]),
-    y = d3.scale.linear().range([height, 0]),
-    y2 = d3.scale.linear().range([height2, 0]);
+    y = d3.scale.linear().range([height, 0]);
+   
  
 var xAxis = d3.svg.axis().scale(x).orient("bottom"),
     xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),
@@ -102,17 +50,24 @@ var brush = d3.svg.brush()
     .on("brush", brush);
  
 var valueline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.Unemployment); });
+	.interpolate("cardinal")
+    .x(function(d) { return x(d.label); })
+    .y(function(d) { return y(d.value); });
  
-var valueline2 = d3.svg.line()
+/*var valueline2 = d3.svg.line()
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.Unemployment); });
+    .y(function(d) { return y(d.Unemployment); });*/
 	
-var svg = d3.select(chart)
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom);
+	
+	var color = d3.scale.ordinal()
+		.range(["Grey","green", "orange", "violet", "cyan", "indigo", "black", "grey", "Brown", "Cerulean Blue", "Chestnut", "Crimson", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58"]);
+	
+ var svg = d3.select("body").append("svg")
+          .attr("width",  width  + margin.left + margin.right)
+          .attr("height", height + margin.top  + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
     
 svg.append("defs").append("clipPath")
     .attr("id", "clip")
@@ -120,15 +75,15 @@ svg.append("defs").append("clipPath")
     .attr("width", width)
     .attr("height", height);
  
-var focus = svg.append("g")
+/*var focus = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       
 var context = svg.append("g")
   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-		var data_All = {};
+		var data_All = {};*/
 		
-d3.csv("test.csv", function (error, data) {
-        var labelVar = 'quarter';
+d3.csv("test1.csv", function (error, data) {
+        var labelVar = 'year';
         var varNames = d3.keys(data[0]).filter(function (key) { return key !== labelVar;});
         color.domain(varNames);
         var seriesData = varNames.map(function (name) {
@@ -139,7 +94,11 @@ d3.csv("test.csv", function (error, data) {
             })
           };
         });
-        x.domain(data.map(function (d) { return d.quarter; }));
+       /* x.domain(data.map(function (d) { 
+		//console.log(d);
+		return d.year; 
+		console.log(d)}));
+		
         y.domain([
           d3.min(seriesData, function (c) { 
             return d3.min(c.values, function (d) { return d.value; });
@@ -147,7 +106,11 @@ d3.csv("test.csv", function (error, data) {
           d3.max(seriesData, function (c) { 
             return d3.max(c.values, function (d) { return d.value; });
           })
-        ]);
+        ]);*/
+		
+		x.domain([2007,2015]);
+		y.domain([0,1000]);
+		
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
@@ -161,6 +124,7 @@ d3.csv("test.csv", function (error, data) {
             .attr("dy", ".71em")
             .style("text-anchor", "end")
             .text("Number of Rounds");
+			
         var series = svg.selectAll(".series")
             .data(seriesData)
           .enter().append("g")
@@ -171,23 +135,29 @@ d3.csv("test.csv", function (error, data) {
           .style("stroke", function (d) { return color(d.name); })
           .style("stroke-width", "4px")
           .style("fill", "none")
-        series.selectAll(".point")
+		  
+		  
+        /*series.selectAll(".point")
           .data(function (d) { return d.values; })
           .enter().append("circle")
            .attr("class", "point")
-           .attr("cx", function (d) { return x(d.label) + x.rangeBand()/2; })
+           .attr("cx", function (d) { return x(d.label); })
            .attr("cy", function (d) { return y(d.value); })
            .attr("r", "5px")
            .style("fill", function (d) { return color(d.name); })
            .style("stroke", "grey")
            .style("stroke-width", "2px")
-           .on("mouseover", function (d) { showPopover.call(this, d); })
-           .on("mouseout",  function (d) { removePopovers(); })
+           //.on("mouseover", function (d) { showPopover.call(this, d); })
+           //.on("mouseout",  function (d) { removePopovers(); })*/
+		   
+		   
         var legend = svg.selectAll(".legend")
             .data(varNames.slice().reverse())
           .enter().append("g")
             .attr("class", "legend")
             .attr("transform", function (d, i) { return "translate(55," + i * 20 + ")"; });
+			
+			
         legend.append("rect")
             .attr("x", width - 10)
             .attr("width", 10)
