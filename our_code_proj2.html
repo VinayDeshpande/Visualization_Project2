@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+
+body { font: 12px Arial;}
+
+path { 
+    stroke: blue;
+    stroke-width: 1;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+
+<!-- load the d3.js library -->    
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+//Constants for the SVG
+var margin = {top: 0, right: 0, bottom: 5, left: 5};
+var width = document.body.clientWidth - margin.left - margin.right;
+var height = 780 - margin.top - margin.bottom;
+
+//Append a SVG to the body of the html page. Assign this SVG as an object to svg
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+var svg2 = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height-100);
+
+var topTermMode = 0;
+
+var data, data2;
+var firstDate = Date.parse("2005-01-01T00:00:00");
+var numSecondADay = 24*60*60;
+var numSecondAMonth = 30*numSecondADay;
+var minYear = 2006;
+var maxYear = 2015;
+var numMonth = 12*(maxYear-minYear);
+
+var sourceList = {};
+var numSource = {};
+var maxCount = {}; // contain the max frequency for 4 categories
+
+var termArray, termArray2, termArray3;
+var relationship;
+var termMaxMax, termMaxMax2;
+var terms;
+var xStep =100;
+//var xScale = d3.time.scale().range([0, (width-xStep-100)/numMonth]);
+var yScale;
+var linkScale;
+var searchTerm ="";
+var isLensing = false;
+var lensingMul = 5;
+var lMonth = -lensingMul*2;
+var coordinate = [0,0];
+var XGAP_ = 8; // gap between months on xAxis
+
+var optArray = [];   // FOR search box
+var numberInputTerms =0;
+var listMonth;
+
+d3.tsv("wikinews.tsv", function(error, data_) {
+      if (error) throw error;
+    data = data_;
+    
+    terms = new Object();
+    termMaxMax = 1;
+    data.forEach(function(d) {
+        d.source = d["source"];
+        // Process date
+        var curDate = Date.parse(d["time"]);
+        d.date = new Date(d["time"]);
+        var year = d.date.getFullYear();
+        var m =  12*(year-minYear) + d.date.getMonth();
+        d.m = m;
+         
+        if (year>=minYear && year<=maxYear){
+            // Add source to sourceList
+            if (!sourceList[d.source])
+                sourceList[d.source]=1;
+            else
+                sourceList[d.source]++;    
+        }
+
+        if (d["person"] != ""){
+            var list = d["person"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "person";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                    }    
+                }    
+            }
+        }
+
+        if (d["location"] != "" && d["location"] != 1){
+            var list = d["location"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "location";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["organization"] != "" && d["organization"] != 1){
+            var list = d["organization"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "organization";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["miscellaneous"] != "" && d["miscellaneous"] != 1){
+            var list = d["miscellaneous"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "miscellaneous";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        
+    });
+    console.log("DONE reading the input file = "+data.length); 
+
+});
+
+
+
+
+
+</script>
+</body>
