@@ -19,7 +19,7 @@ Later on we have read and preprocessed the dataset using D3 only and find the to
 The top 50 words have been placed in a wordle with the words with higher frequency looking bigger and the words with lower frequencies looking smaller.Words like new, united have higher frequency
 
 ##Contribution of each team member
-1) Vibhuti Gupta
+1) Vibhuti Gupta(Leader)
 
 - Wrote script in R for data preprocessing.
 -  Wrote script in R for generating top 50 words of each category along with monthly and daily frequencies.
