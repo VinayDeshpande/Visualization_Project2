@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<div style="height: 50px;" class="ui-widget">
+<h2><center>Project 2 : Text Visualization  </center></h2></div>
+<div id="relation">
+<p align="right"> <a href="https://vinaydeshpande.github.io/Visualization_Project2/relation.html" >Click Here to view the Relationships among words</a>
+<p align="right"> <a href="https://vinaydeshpande.github.io/Visualization_Project2/map.html" >Click Here to View the world Map and their Locations</a></div>
+<div id="Choose">
+<p>Whcih Data would you like to use ??? </p>
+<input type="radio" name="dataset" id="dataset" onclick="wikiFunction()">WikiNews<br>
+<input type="radio" name="dataset" id="dataset" onclick="Huffington()">Huffington Post
+</div> 
+<h3>Please Slide to Select the Year:</h3> <input id="slide" type="range" min="2004" max="2015" step="1" width="700" value="1" onchange="updateSlider(this.value)">
+<div id="sliderAmount"></div>​
+<script src="d3.v3.min.js"></script>
+  <!-- <script src="https://raw.github.com/fryn/html5slider/master/html5slider.js"></script><script src="https://raw.github.com/fryn/html5slider/master/html5slider.js"></script> -->
+  <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+  
+<style>
+ .ui-widget{
+       background-color:brown;
+	   height:
+
+	   }
+h3 { 
+	font-family:Georgia,serif;
+ color:Black;
+ font-size:40px
+ font-variant: small-caps; text-transform: none; font-weight: 100; margin-bottom: 0
+}
+h2{
+font-family:Georgia,serif;
+ color:White;
+ font-size:40px
+ font-variant: small-caps; text-transform: none; font-weight: 100; margin-bottom: 0
+}
+body { font: 12px Arial;
+	        background-color:#F0FFFF;}
+			
+	.node circle {
+	  stroke: #fff;
+	  stroke-width: 1.5px;
+	}
+path { 
+    stroke: brown;
+    fill: none;
+}
+.axis path,
+.axis line {
+    fill: none;
+    stroke: brown;
+    stroke-width: 1;
+    
+}
+    .hidden {
+        display: none;
+    }
+    div.tooltip {
+        color: #222;
+        background-color: #fff;
+        padding: .5em;
+        text-shadow: #f5f5f5 0 1px 0;
+        border-radius: 2px;
+        opacity: 0.9;
+        position: absolute;
+    }
+body { font: 12px Arial;}
+svg {
+  font: 10px sans-serif;
+}
+ 
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.y.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+.line {
+  fill: none;
+}
+</style>
+
+<script>
+// Set the dimensions of the canvas / graph
+var margin = {top: 10, right: 10, bottom: 100, left: 40},
+    width = 1060 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+   
+	
+// Set the ranges
+
+// Define the line
+
+</script>
+
+ <script>
+ 
+ 
+ 
+ 
+ 
+ var frequency={};
+var dataArray=[];
+var WordCount=[];
+var Data_Sorted=[];
+var dataAll={};
+
+var parsedate = d3.time.format("%m-%Y").parse;
+    function updateSlider(slideAmount) {
+        var sliderDiv = document.getElementById("sliderAmount");
+        sliderDiv.innerHTML = slideAmount;
+		console.log(slideAmount);
+		
+		var e = document.getElementById("ddlViewBy");
+	var strUser = slideAmount;
+	var IndexValue=1;
+	words=[];
+	Data_Sorted={};
+	WordCount=[];
+	if(IndexValue!=0){
+	var count=0;
+	frequency=[];
+	var data=[];
+	var array_count=0;
+	for(var term in terms){
+		for(var i=0;i<12;i++){
+			var year_month=strUser+'_'+i;
+			if(terms[term][year_month]){
+				count+=terms[term][year_month];
+			}
+		}
+		data.push(term);
+		data.push(count);
+		frequency.push(data);
+		data=[];
+		count=0;
+	}
+		
+		frequency.sort(function(a,b){
+			return d3.descending(a[1], b[1]);
+		
+		})
+	
+	
+	for(var i=0;i<50;i++){
+		words.push(frequency[i][0]);
+		if(WordCount[frequency[i][0]]==undefined)
+			WordCount[frequency[i][0]]=[];
+		WordCount[frequency[i][0]].push(frequency[i][1]);
+	}
+	console.log(words);
+	}
+	showNewWords(myWordCloud);
+	count=0;
+	for(var term in words){
+		if(Data_Sorted[words[term]]==undefined)
+			Data_Sorted[words[term]]=[];
+		for(var year=0;year<12;year++){
+			var year_month=strUser+'_'+year;
+			if(Data_Sorted[words[term]][[count]]==undefined)
+				Data_Sorted[words[term]][[count]]=[];
+			Data_Sorted[words[term]][count]=new Object();
+			Data_Sorted[words[term]][count].month=year+1;
+			Data_Sorted[words[term]][count].Year=strUser;
+			if(terms[words[term]][year_month]==undefined)
+				Data_Sorted[words[term]][count].Frequency=0;
+			else	
+			Data_Sorted[words[term]][count].Frequency=terms[words[term]][year_month];
+			Data_Sorted[words[term]][count].value=words[term];
+			count++;
+		}
+			dataAll[words[term]]=Data_Sorted[words[term]];
+			count=0;
+		}
+		for(var term in words){
+		Data_Sorted[words[term]].forEach(function(d){
+			d.date = parsedate(d.month+"-"+d.Year);
+			d.Frequency=d.Frequency;
+			d.value=d.value;
+		});
+		}
+ 
+  
+  
+		// Scale the range of the data
+		
+		
+			
+			
+		for(var i=0;i<words.length;i++){
+				
+			dataArray.push(Data_Sorted[words[i]]);
+			//console.log("dddddddddaaaaaaaa"+dataArray);
+			// Add the valueline path.
+			}
+			
+			   
+		
+		
+			
+	}
+
+var tooltip = d3.select('body').append('div')
+            .attr('class', 'hidden tooltip'),
+			active = d3.select(null);
+// Encapsulate the word cloud functionality
+function wordCloud(selector) {
+    var fill = d3.scale.category20();
+    //Construct the word cloud's SVG element
+    var svg1 = d3.select(selector).append("svg")
+        .attr("width", 500)
+        .attr("height", 500)
+        .append("g")
+        .attr("transform", "translate(250,250)");
+    //Draw the word cloud
+    function draw(words) {
+        var cloud = svg1.selectAll("g text")
+                        .data(words, function(d) { return d.text; })
+	var mouse;
+        //Entering words
+        cloud.enter()
+            .append("text")
+            .style("font-family", "Impact")
+			.attr("val",function(d){return d.text;})
+            .style("fill", function(d, i) { return fill(i); })
+            .attr("text-anchor", "middle")
+            .attr('font-size', 1)
+            .text(function(d) { return d.text; })
+			.on('mousemove', function(d) {
+					
+					mouse = d3.mouse(svg1.node()).map(function(d) {
+                     return parseInt(d);
+                    });
+					var xCordinate=d3.mouse(this)[0]+300;
+					var yCordinate=d3.mouse(this)[1]+100;
+                    tooltip.classed('hidden', false)
+						.attr('cursor', 'pointer')
+                        .attr('style', 'left:' + xCordinate +
+                                'px; top:' + yCordinate + 'px')
+                        .html(d.text+"<br/>Frequency:"+WordCount[d.text]);
+                })
+                .on('mouseout', function() {
+                    tooltip.classed('hidden', true);
+                })
+				.on("click", clicked);
+        //Entering and existing words
+        cloud
+            .transition()
+                .duration(600)
+                .style("font-size", function(d) { return d.size + "px"; })
+                .attr("transform", function(d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .style("fill-opacity", 1);
+        //Exiting words
+        cloud.exit()
+            .transition()
+                .duration(200)
+                .style('fill-opacity', 1e-6)
+                .attr('font-size', 1)
+                .remove();
+    }
+    //Use the module pattern to encapsulate the visualisation code. We'll
+    // expose only the parts that need to be public.
+    return {
+        //Recompute the word cloud for a new set of words. This method will
+        // asycnhronously call draw when the layout has been computed.
+        //The outside world will need to call this function, so make it part
+        // of the wordCloud return value.
+        update: function(words) {
+            d3.layout.cloud().size([600,600])
+                .words(words)
+                .padding(5)
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .font("Impact")
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw)
+                .start();
+        }
+    }
+}
+function clicked(d) {
+  if (active.node() === this) return reset(d);
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+  console.log(d.text);
+  document.getElementById(d.text).style.display = "";
+	
+}
+function reset(d) {
+  active.classed("active", false);
+  active = d3.select(null);
+  document.getElementById(d.text).style.display = "none";
+}
+//Some sample data - http://en.wikiquote.org/wiki/Opening_lines
+var words=[];
+var gPopularFiftyWordsFinal=[];
+var gPopularWords=[];
+//Prepare one of the sample sentences by removing punctuation,
+// creating an array of words and computing a random size attribute.
+function getWords(i) {
+	
+	
+    return i.map(function(d) {
+                return {text: d, size: Math.max( Math.random() * 40, WordCount[d][0]/5)};
+            })
+}
+//This method tells the word cloud to redraw with a new set of words.
+//In reality the new words would probably come from a server request,
+// user input or some other source.
+function showNewWords(vis, i) {
+    
+	
+    vis.update(getWords(words))
+    //setTimeout(function() { showNewWords(myWordCloud)}, 10000)	
+}
+//Create a new instance of the word cloud visualisation.
+var myWordCloud = wordCloud('body');
+//Start cycling through the demo data
+showNewWords(myWordCloud);
+</script>
+</div>
+
+<script>
+var terms;
+var termMaxMax;
+var sourceList = {};
+var minYear=2004;
+var maxYear=2015;
+var data, data2;
+var numSecondADay = 24*60*60;
+var numSecondAMonth = 30*numSecondADay;
+var numMonth = 12*(maxYear-minYear);
+var numSource = {};
+var maxCount = {}; // contain the max frequency for 4 categories
+var termArray, termArray2, termArray3;
+var relationship;
+var termMaxMax2;
+var searchTerm ="";
+d3.tsv("wikinews.tsv", function(error, data_) {
+      if (error) throw error;
+    data = data_;
+    
+    terms = new Object();
+    termMaxMax = 1;
+    data.forEach(function(d) {
+        d.source = d["source"];
+        // Process date
+        var curDate = Date.parse(d["time"]);
+        d.date = new Date(d["time"]);
+        var year = d.date.getFullYear();
+        var m = year+'_'+d.date.getMonth();
+		
+        d.m = m;
+         
+        if (year>=minYear && year<=maxYear){
+            // Add source to sourceList
+            if (!sourceList[d.source])
+                sourceList[d.source]=1;
+            else
+                sourceList[d.source]++;    
+        }
+        if (d["person"] != ""){
+            var list = d["person"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "person";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                    }    
+                }    
+            }
+        }
+        if (d["location"] != "" && d["location"] != 1){
+            var list = d["location"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "location";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["organization"] != "" && d["organization"] != 1){
+            var list = d["organization"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "organization";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["miscellaneous"] != "" && d["miscellaneous"] != 1){
+            var list = d["miscellaneous"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "miscellaneous";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+	
+		
+        
+    });
+	
+    console.log("DONE reading the input file = "+data.length); 
+	
+});
+	
+function wikiFunction()
+{
+d3.tsv("wikinews.tsv", function(error, data_) {
+      if (error) throw error;
+    data = data_;
+    
+    terms = new Object();
+    termMaxMax = 1;
+    data.forEach(function(d) {
+        d.source = d["source"];
+        // Process date
+        var curDate = Date.parse(d["time"]);
+        d.date = new Date(d["time"]);
+        var year = d.date.getFullYear();
+        var m = year+'_'+d.date.getMonth();
+		
+        d.m = m;
+         
+        if (year>=minYear && year<=maxYear){
+            // Add source to sourceList
+            if (!sourceList[d.source])
+                sourceList[d.source]=1;
+            else
+                sourceList[d.source]++;    
+        }
+        if (d["person"] != ""){
+            var list = d["person"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "person";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                    }    
+                }    
+            }
+        }
+        if (d["location"] != "" && d["location"] != 1){
+            var list = d["location"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "location";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["organization"] != "" && d["organization"] != 1){
+            var list = d["organization"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "organization";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["miscellaneous"] != "" && d["miscellaneous"] != 1){
+            var list = d["miscellaneous"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "miscellaneous";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+	
+		
+        
+    });
+	
+    console.log("DONE reading the input file = "+data.length); 
+	
+});
+}
+
+function Huffington() {
+
+d3.tsv("wikinews.tsv", function(error, data_) {
+      if (error) throw error;
+    data = data_;
+    
+    terms = new Object();
+    termMaxMax = 1;
+    data.forEach(function(d) {
+        d.source = d["source"];
+        // Process date
+        var curDate = Date.parse(d["time"]);
+        d.date = new Date(d["time"]);
+        var year = d.date.getFullYear();
+        var m = year+'_'+d.date.getMonth();
+		
+        d.m = m;
+         
+        if (year>=minYear && year<=maxYear){
+            // Add source to sourceList
+            if (!sourceList[d.source])
+                sourceList[d.source]=1;
+            else
+                sourceList[d.source]++;    
+        }
+        if (d["person"] != ""){
+            var list = d["person"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "person";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                    }    
+                }    
+            }
+        }
+        if (d["location"] != "" && d["location"] != 1){
+            var list = d["location"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "location";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["organization"] != "" && d["organization"] != 1){
+            var list = d["organization"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "organization";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+        if (d["miscellaneous"] != "" && d["miscellaneous"] != 1){
+            var list = d["miscellaneous"].split("|");
+            for (var i=0; i<list.length;i++){
+                var term = list[i];
+                d[term] = 1;
+                if (!terms[term]){
+                    terms[term] = new Object();
+					terms[term].term=term;
+                    terms[term].max = 0;
+                    terms[term].maxMonth = -100;   // initialized negative
+                    terms[term].category = "miscellaneous";
+                }    
+                if (!terms[term][m])
+                    terms[term][m] = 1;
+                else{
+                    terms[term][m] ++;
+                    if (terms[term][m]>terms[term].max){
+                        terms[term].max = terms[term][m];
+                        terms[term].maxMonth = m;
+                        if (terms[term].max>termMaxMax)
+                            termMaxMax = terms[term].max;
+                        
+                    }    
+                }    
+            }
+        }
+	
+		
+        
+    });
+	
+    console.log("DONE reading the input file = "+data.length); 
+	
+});
+}
+
+
+</script>
+
+
