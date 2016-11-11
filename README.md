@@ -1,7 +1,7 @@
 ##Visualization_Project2: Text Visualization from wiki news and huffington posts
 Please click to watch the overview video.
 
-[![video](https://cloud.githubusercontent.com/assets/19288804/19246691/37394c84-8eed-11e6-8ad6-2ff0f208e299.jpg)](https://youtu.be/M4ZldLZSbGQ)
+[![video](https://cloud.githubusercontent.com/assets/19288804/19246691/37394c84-8eed-11e6-8ad6-2ff0f208e299.jpg)](https://youtu.be/afw_tuR4nA8)
 
 
 
