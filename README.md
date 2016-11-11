@@ -47,6 +47,13 @@ The top 50 words have been placed in a wordle with the words with higher frequen
 
 ![relation](https://cloud.githubusercontent.com/assets/19288804/20230167/1d2a0daa-a820-11e6-8c3e-4aad0ffbbbae.jpg)
 
+###cahnge in size of nodes 
+
+![change in size of nodes and links on mouse hover](https://cloud.githubusercontent.com/assets/19288804/20230292/c94c5d7c-a820-11e6-9c8f-4430ef67fc1c.jpg)
+
+###change in size of labels
+![change in size of label on mouse over](https://cloud.githubusercontent.com/assets/19288804/20230285/c213d4b8-a820-11e6-9b95-1f1e419592fc.png)
+
 
 
 
