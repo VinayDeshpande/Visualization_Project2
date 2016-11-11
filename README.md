@@ -41,6 +41,11 @@ The top 50 words have been placed in a wordle with the words with higher frequen
 ##Basic Functionalities are shown below along with Screenshots.
 
 ### Word cloud
+![wordcloud](https://cloud.githubusercontent.com/assets/19288804/20230163/18927cd2-a820-11e6-9a97-90e8bb712e31.jpg)
+
+###Relationships
+
+![relation](https://cloud.githubusercontent.com/assets/19288804/20230167/1d2a0daa-a820-11e6-8c3e-4aad0ffbbbae.jpg)
 
 
 
