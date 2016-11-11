@@ -21,23 +21,23 @@ The top 50 words have been placed in a wordle with the words with higher frequen
 ##Contribution of each team member
 1) Vibhuti Gupta
 
--> Wrote script in R for data preprocessing.
--> Wrote script in R for generating top 50 words of each category along with monthly and daily frequencies.
--> Wrote scripts for finding relationships between terms in collaboration with Vinay.
--> Made the github report with Naimisha.
+- Wrote script in R for data preprocessing.
+-  Wrote script in R for generating top 50 words of each category along with monthly and daily frequencies.
+- Wrote scripts for finding relationships between terms in collaboration with Vinay.
+- Made the github report with Naimisha.
 
 2) Vinay Deshpande
 
--> Worked on scripts for visualization of word cloud.
--> Developed the UI for the word cloud with Naimisha.
--> Developed the slider with Vibhuti and Naimisha.
+- Worked on scripts for visualization of word cloud.
+-  Developed the UI for the word cloud with Naimisha.
+- Developed the slider with Vibhuti and Naimisha.
 
 3) Naimisha 
 
--> Developed scripts for generation of world map showing locations of top 50 words.
--> Developed the UI for relationships page.
+- Developed scripts for generation of world map showing locations of top 50 words.
+- Developed the UI for relationships page.
 
--> Developed the script for showing the relationships 
+
 
 
  
