@@ -38,6 +38,11 @@ The top 50 words have been placed in a wordle with the words with higher frequen
 - Developed the UI for relationships page.
 
 
+##Basic Functionalities are shown below along with Screenshots.
+
+### Word cloud
+
+
 
 
  
