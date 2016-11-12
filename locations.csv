@@ -1,51 +1,23 @@
-word,long,lat
-iraq,33.2232,43.32
-texas,99.9018,31.9686
-afghanistan,33.9391,67.71
-new york,40.7128,74.0028
-israel,31.0461,34.8516
-california,36.7783,119.4179
-iran,32.4279,53.688
-china,35.8617,104.1954
-florida,27.6648, 81.5158
-russia,61.524,105.3188
-pakistan,30.3753,69.3451
-ohio,40.4173,82.9071
-vietnam,14.0583,108.2772
-massachusetts,42.4072,71.3824
-chicago,41.8781,87.6298
-arizona,34.0489,111.0937
-new york ,40.7128,74.0059
-washington,47.751,380.7401
-Australia,-41,174
-london,55,-3.33
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-pennsylvania,,
+word	lat	long
+iraq	33.2232	43.32
+texas	31.9018	-99.9686
+afghanistan	33.9391	67.71
+israel	31.0461	34.8516
+california	34.0489	-116.4179
+iran	32.4279	53.688
+china	35.8617	104.1954
+florida	27.6648	-80.6298
+russia	61.524	105.3188
+pakistan	30.3753	69.3451
+ohio	40.4173	-100.6298
+vietnam	14.0583	108.2772
+massachusetts	42.4072	-80.3824
+chicago	41.8781	-87.6298
+arizona	36.773	-110.0937
+new york 	40.7128	-74.6298
+newzeland	-41	174
+london	55	-3.33
+washington	47	-80.741
+nevada	40.773	-110.0937
+pensylvania	41.203	-77.45
+Australia	-35	150
